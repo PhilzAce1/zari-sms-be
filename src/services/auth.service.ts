@@ -7,7 +7,6 @@ import { User } from '../interfaces/users.interface';
 import { UserModel as userModel } from '../models/users.model';
 import { isEmptyObject } from '../utils/util';
 import { JWT_SECRET, __prod__ } from '../config';
-import { sendMessage } from '../utils/sendMail';
 class AuthService {
 	public users = userModel;
 	public async signup(
@@ -26,22 +25,16 @@ class AuthService {
 			);
 
 		const hashedPassword = await bcrypt.hash(userData.password, 10);
-		const generatedUsername = this.genUsername(userData.email);
+
 		const createUserData: User = {
 			email: userData.email,
 			password: hashedPassword,
-			name: generatedUsername,
+			name: userData.name,
 		};
 		const res = await this.users.create(createUserData).save();
 		const tokenData = this.createToken(res);
-		await sendMessage(userData.email);
-		return { findUser: res, token: tokenData.token };
-	}
 
-	private genUsername(userEmail: string): string {
-		const email = userEmail.split('@');
-		const emArr = email[0];
-		return emArr;
+		return { findUser: res, token: tokenData.token };
 	}
 
 	public async login(

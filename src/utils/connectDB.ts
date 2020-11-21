@@ -1,5 +1,6 @@
 import { createConnection, getConnectionOptions } from 'typeorm';
 import { UserModel } from '../models/users.model';
+import { Email } from '../models/email.model';
 import { __prod__ } from '../config';
 
 export async function connect() {
@@ -8,13 +9,13 @@ export async function connect() {
 		? createConnection({
 				...connectionOptions,
 				url: process.env.DATABASE_URL,
-				entities: [UserModel],
+				entities: [UserModel, Email],
 				name: 'default',
 		  } as any)
 		: createConnection({
 				...connectionOptions,
 				name: 'default',
-				entities: [UserModel],
+				entities: [UserModel, Email],
 		  });
 }
 export async function database() {

@@ -1,8 +1,10 @@
 /* -------------------------- External Dependencies ------------------------- */
 import { NextFunction, Request, Response } from 'express';
+import HttpException from '../exceptions/HttpException';
+import { RequestWithUser } from '../interfaces/auth.interface';
 
 /* -------------------------- Validators and Interfaces  ------------------------- */
-import { CreateUserDto } from '../dtos/users.dto';
+import { CreateUserDto, SendMessageDtoo } from '../dtos/users.dto';
 // import { User } from '../interfaces/users.interface';
 
 /* -------------------------- Internal Dependencies ------------------------- */
@@ -40,6 +42,28 @@ class AuthController {
 			};
 
 			res.status(200).json({ payload: resData, success: true });
+		} catch (error) {
+			next(error);
+		}
+	};
+	public sendMessage = async (
+		req: RequestWithUser,
+		res: Response,
+		next: NextFunction
+	) => {
+		if (req.user.id === undefined)
+			throw new HttpException(409, 'You must be authenticated');
+
+		const userData: SendMessageDtoo = req.body;
+		const id = req.user.id;
+		userData.id = id;
+		const isMailSent = await this.authService.sendMessage(userData);
+
+		if (!isMailSent) {
+			throw new HttpException(400, 'Something went wrong ');
+		}
+		try {
+			res.status(200).json({ payload: 'stuff', success: true });
 		} catch (error) {
 			next(error);
 		}

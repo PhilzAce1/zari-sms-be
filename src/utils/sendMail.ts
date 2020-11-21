@@ -1,13 +1,14 @@
 import sgMail from '@sendgrid/mail';
 import { SEND_GRID_API_KEY } from '../config';
-export async function sendMessage(to: string): Promise<void> {
+import { mailtemp } from './mailtemplate';
+export async function sendMessage(to: string, data): Promise<void> {
 	sgMail.setApiKey(SEND_GRID_API_KEY);
 	const msg = {
 		to, // Change to your recipient
-		from: 'akuagwuphilemon11@gmail.com', // Change to your verified sender
-		subject: 'Onboarding Email',
+		from: 'akuagwuphilemon2019@gmail.com', // Change to your verified sender
+		subject: 'Sent SMS',
 		text: `Welcome to Twitee Application`,
-		// html: html,
+		html: mailtemp(data),
 	};
 
 	return sgMail

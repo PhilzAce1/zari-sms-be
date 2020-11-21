@@ -1,14 +1,17 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import { CreateUserDto } from '../dtos/users.dto';
+import { CreateUserDto, SendMessageDtoo } from '../dtos/users.dto';
 import HttpException from '../exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '../interfaces/auth.interface';
 import { User } from '../interfaces/users.interface';
 import { UserModel as userModel } from '../models/users.model';
+import { Email } from '../models/email.model';
 import { isEmptyObject } from '../utils/util';
+import { sendMessage } from '../utils/sendMail';
 import { JWT_SECRET, __prod__ } from '../config';
 class AuthService {
 	public users = userModel;
+	private email = Email;
 	public async signup(
 		userData: CreateUserDto
 	): Promise<{ findUser: User; token: string }> {
@@ -62,6 +65,19 @@ class AuthService {
 		return { findUser, token: tokenData.token };
 	}
 
+	public async sendMessage(userData: SendMessageDtoo) {
+		const { destinations, id, message, sender } = userData;
+		await this.email
+			.create({
+				destinations,
+				message,
+				sender,
+				creatorId: id,
+			})
+			.save();
+		await sendMessage('akuagwuphilemon11@gmail.com', userData);
+		return true;
+	}
 	public createToken(user: User): TokenData {
 		const dataStoredInToken: DataStoredInToken = { id: user.id };
 		const secret: string = JWT_SECRET;

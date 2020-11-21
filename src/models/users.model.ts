@@ -5,8 +5,11 @@ import {
 	Entity,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
+	OneToMany,
+	JoinTable,
 } from 'typeorm';
 import { User } from '../interfaces/users.interface';
+import { Email } from './email.model';
 @Entity()
 export class UserModel extends BaseEntity implements User {
 	@PrimaryGeneratedColumn()
@@ -20,6 +23,10 @@ export class UserModel extends BaseEntity implements User {
 
 	@Column({ nullable: true })
 	password: string;
+
+	@OneToMany(() => Email, (emails) => emails.creator)
+	@JoinTable()
+	emails: Email[];
 
 	@CreateDateColumn()
 	createdAt: Date;

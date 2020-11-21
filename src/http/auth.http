@@ -3,13 +3,25 @@
 ###
 # baseURL
 @baseURL = http://localhost:3000
+###
 
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjA1OTU0MDM5LCJleHAiOjE2MDYyMTMyMzl9.BdiCyYXRD7aoSUUon5pD-iHkb3fkKwThDp0LLwPQvsk
+
+POST https://zari-sms.herokuapp.com/signup
+Content-Type: application/json
+
+{
+    "name":"stuff", 
+    "email":"somename@gmail.com", 
+    "password":"somethijng"
+}
 ###
 # signup
 POST {{baseURL}}/signup
 Content-Type: application/json
 
 {
+    "name":"Phile", 
     "email": "example@gmail.com",
 	"password": "qwer1234"
 }
@@ -22,6 +34,20 @@ Content-Type: application/json
 {
     "email": "lim@gmail.com",
 	"password": "q1w2e3r4"
+}
+
+###
+
+###
+# Login
+POST {{baseURL}}/sendmessage
+Content-Type: application/json
+x-auth-token: {{authToken}}
+
+{
+    "message": "lim@gmail.com",
+	"sender": "q1w2e3r4",
+    "destinations":"somenumbers"
 }
 
 ###

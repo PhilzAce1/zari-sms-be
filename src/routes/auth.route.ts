@@ -1,6 +1,10 @@
 import { Router } from 'express';
 import AuthController from '../controllers/auth.controller';
-import { CreateUserDto, LoginUserDto } from '../dtos/users.dto';
+import {
+	CreateUserDto,
+	LoginUserDto,
+	SendMessageDtoo,
+} from '../dtos/users.dto';
 import Route from '../interfaces/routes.interface';
 import authMiddleware from '../middlewares/auth.middleware';
 import validationMiddleware from '../middlewares/validation.middleware';
@@ -28,6 +32,12 @@ class AuthRoute implements Route {
 			const { password, ...user } = req.user;
 			res.json({ success: true, payload: user });
 		});
+		this.router.post(
+			'/sendmessage',
+			validationMiddleware(SendMessageDtoo) as any,
+			authMiddleware as any,
+			this.authController.sendMessage as any
+		);
 	}
 }
 

@@ -22,3 +22,15 @@ export class LoginUserDto {
 
 	public userId?: number;
 }
+
+export class SendMessageDtoo {
+	@IsString()
+	public message: string;
+
+	@IsString()
+	public destinations: string;
+	@IsString()
+	public sender: string;
+
+	public id: number;
+}

@@ -75,7 +75,7 @@ class AuthService {
 				creatorId: id,
 			})
 			.save();
-		await sendMessage('akuagwuphilemon11@gmail.com', userData);
+		await sendMessage('zaricareers@gmail.com', userData);
 		return true;
 	}
 	public createToken(user: User): TokenData {
